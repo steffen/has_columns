@@ -1,0 +1,51 @@
+HasColumns
+==========
+
+A Rails plugin that delegates access of association's attributes (including the association's association's attributes, see example).
+
+
+Support versions
+=======
+This plugin has been a while in production with a Rails 2.1 application.
+Other versions are not tested, but may work.
+
+
+Use Case
+=======
+
+This comes handy for exporting CSV or transforming your records to JSON.
+
+
+Example
+=======
+
+class Employee < ActiveRecord::Base
+  has_columns :from => :position
+end
+
+class Report < ActiveRecord::Base
+  has_columns :from => :employee
+end
+
+You can access the associations's attributes the following way:
+
+@report = Report.first
+puts @report.employee_name
+puts @report.employee_position_name
+
+
+You can transform your records easily to JSON:
+
+@report.to_json(:methods => [:employee_name, :employee_position_name])
+
+
+Credits
+=======
+
+This plugin is based on http://agilewebdevelopment.com/plugins/ar_delegation by Dave Verwer.
+I changed:
+- It delegates all attributes by default, you can narrow down via the :only and :except option.
+- It delegates attributes of the association's delegated attributes. Like employee.position.name to employee_position_name, see example.
+
+
+Copyright (c) 2010 Steffen Hiller, released under the MIT license
